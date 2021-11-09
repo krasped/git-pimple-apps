@@ -27,30 +27,63 @@ let playField = [
 
 
 let arrayOfTetro = [
-    [[-1,-1,-1,0,0,0,0,1],[-1,1,0,0,0,1,1,0],[0,0,0,1,1,-1,1,0],[-1,-1,0,-1,0,0,1,0]],// _|-
-    [[-1,-1,-1,0,0,0,0,1],[-1,1,0,0,0,1,1,0],[0,-1,0,0,1,0,1,1],[-1,0,0,-1,0,0,1,-1]],// -|_
-    [[-1,1,0,-1,0,0,0,1],[-1,0,0,0,1,0,1,1],[0,-1,0,0,0,1,1,-1],[-1,-1,-1,0,0,0,1,0]],// __|
-    [[-1,-1,0,-1,0,0,0,1],[-1,0,-1,1,0,0,1,0],[0,-1,0,0,0,1,1,1],[-1,0,0,0,1,-1,1,0]],// |__
-    [[-1,0,0,-1,0,0,0,1],[-1,0,0,0,0,1,1,0],[-1,0,0,-1,0,0,1,0],[0,-1,0,0,0,1,1,0]],// _|_
-    [[0,-1,0,0,0,1,0,2],[-1,0,0,0,1,0,2,0]],// ___
-    [[-1,-1,-1,0,0,-1,0,0,]]// [_]
+    [
+        [-1, -1, -1, 0, 0, 0, 0, 1],
+        [-1, 1, 0, 0, 0, 1, 1, 0],
+        [0, 0, 0, 1, 1, -1, 1, 0],
+        [-1, -1, 0, -1, 0, 0, 1, 0]
+    ], // _|-
+    [
+        [-1, -1, -1, 0, 0, 0, 0, 1],
+        [-1, 1, 0, 0, 0, 1, 1, 0],
+        [0, -1, 0, 0, 1, 0, 1, 1],
+        [-1, 0, 0, -1, 0, 0, 1, -1]
+    ], // -|_
+    [
+        [-1, 1, 0, -1, 0, 0, 0, 1],
+        [-1, 0, 0, 0, 1, 0, 1, 1],
+        [0, -1, 0, 0, 0, 1, 1, -1],
+        [-1, -1, -1, 0, 0, 0, 1, 0]
+    ], // __|
+    [
+        [-1, -1, 0, -1, 0, 0, 0, 1],
+        [-1, 0, -1, 1, 0, 0, 1, 0],
+        [0, -1, 0, 0, 0, 1, 1, 1],
+        [-1, 0, 0, 0, 1, -1, 1, 0]
+    ], // |__
+    [
+        [-1, 0, 0, -1, 0, 0, 0, 1],
+        [-1, 0, 0, 0, 0, 1, 1, 0],
+        [-1, 0, 0, -1, 0, 0, 1, 0],
+        [0, -1, 0, 0, 0, 1, 1, 0]
+    ], // _|_
+    [
+        [0, -1, 0, 0, 0, 1, 0, 2],
+        [-1, 0, 0, 0, 1, 0, 2, 0]
+    ], // ___
+    [
+        [-1, -1, -1, 0, 0, -1, 0, 0, ]
+    ] // [_]
 ];
 
-// let arrayOfTetro = [
-//     [0, 4, 0, 5, 1, 3, 1, 4],
-//     [0, 3, 0, 4, 1, 4, 1, 5],
-//     [0, 5, 1, 3, 1, 4, 1, 5],
-//     [0, 3, 1, 3, 1, 4, 1, 5],
-//     [0, 4, 1, 3, 1, 4, 1, 5],
-//     [0, 3, 0, 4, 0, 5, 0, 6],
-//     [0, 4, 0, 5, 1, 4, 1, 5],
-// ];
+
 let mainInnerHTML = '';
 
 function getRandomTetro(max = 7) {
     let x = Math.floor(Math.random() * max);
-    centerOfTetro = [0, 4, x];
-    return arrayOfTetro[x][0];
+    return centerOfTetro = [1, 4, x, 0]; //некрасиво
+}
+
+function transformTetroToAdd(positionAndTetroZeroPosition) {
+    console.log(positionAndTetroZeroPosition);
+    let [tetroY, tetroX, tetroNum, tetroRotateNum] = positionAndTetroZeroPosition;
+    let tetro = arrayOfTetro[tetroNum][tetroRotateNum];
+    let tetroNewPosition = tetro.map((value, index) => {
+        return (index % 2 == 1) ? (value + tetroX) : (value + tetroY);
+        console.log(value + tetroX,index);
+    });
+    console.log(tetroNewPosition);
+    return tetroNewPosition;
 }
 
 function replaceToRotateTetro(position, type) {
@@ -58,7 +91,7 @@ function replaceToRotateTetro(position, type) {
 }
 
 function addTetro() {
-    tetro = getRandomTetro();
+    let tetro = transformTetroToAdd(getRandomTetro());
     console.log(tetro);
 
     for (let y = 0; y < tetro.length; y += 2)
@@ -168,7 +201,6 @@ function startGame() {
     temerStart = setTimeout(startGame, speed);
     movingTetro();
     drawField();
-    console.log(centerOfTetro);
 }
 
 function stopGame() {
