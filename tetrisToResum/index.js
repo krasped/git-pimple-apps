@@ -84,6 +84,7 @@ function drowNewTetro(newTetro) {
     for (let y = 0; y < tetro.length; y += 2) {
             playField[tetro[y]][tetro[y + 1]] = 1;
         }
+    drawField(); // для быстрой реакции
 };
 
 function transformTetroToAdd(positionAndTetroZeroPosition) {
@@ -228,6 +229,7 @@ function moveLeft() {
         }
     }
     centerOfTetro[1]--;
+    drawField();
 }
 
 function moveRight() {
@@ -240,6 +242,7 @@ function moveRight() {
         }
     }
     centerOfTetro[1]++;
+    drawField();
 }
 //Move faster
 function moveFaster(faster) {
