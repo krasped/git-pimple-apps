@@ -53,7 +53,9 @@ function getRandomTetro(max = 7) {
     return arrayOfTetro[x];
 }
 
-function
+function replaceToRotateTetro() {
+    
+}
 
 function addTetro() {
     tetro = getRandomTetro();
