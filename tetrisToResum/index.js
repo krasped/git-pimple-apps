@@ -53,7 +53,7 @@ let arrayOfTetro = [
     ], // |__
     [
         [-1, 0, 0, -1, 0, 0, 0, 1],
-        [-1, 0, 0, 0, 0, 1, 1, 0],       
+        [-1, 0, 0, 0, 0, 1, 1, 0],
         [0, -1, 0, 0, 0, 1, 1, 0],
         [-1, 0, 0, -1, 0, 0, 1, 0]
     ], // _|_
@@ -82,8 +82,8 @@ function getRandomTetro(max = 7) {
 function drowNewTetro(newTetro) {
     let tetro = newTetro;
     for (let y = 0; y < tetro.length; y += 2) {
-            playField[tetro[y]][tetro[y + 1]] = 1;
-        }
+        playField[tetro[y]][tetro[y + 1]] = 1;
+    }
     drawField(); // для быстрой реакции
 };
 
@@ -96,9 +96,9 @@ function transformTetroToAdd(positionAndTetroZeroPosition) {
     return tetroNewPosition;
 }
 
-function replaceToRotateTetro() {
-    let tetro = transformTetroToAdd(centerOfTetro);
-}
+// function replaceToRotateTetro() {
+//     let tetro = transformTetroToAdd(centerOfTetro);
+// }
 
 function addTetro() {
     let tetro = transformTetroToAdd(getRandomTetro());
@@ -145,9 +145,7 @@ function canTetroMovingRight() {
     return true;
 }
 
-function canTetroRotate() {
-    return true;
-}
+
 
 function movingTetro() {
     if (canTetroMoving()) {
@@ -170,14 +168,14 @@ function movingTetro() {
                 }
             }
         }
-        clearFullLines(Array.from(new Set(lineStopTetro)));//передает массив из значений у не повторяющихся их проверяет на заполнение
+        clearFullLines(Array.from(new Set(lineStopTetro))); //передает массив из значений у не повторяющихся их проверяет на заполнение
         addTetro();
     }
 }
 // Удаление линии при ее полном заполнении
 function clearFullLines(line) {
-    console.log(line,line.length);
-    for (let i = line.length-1; i >= 0; i--) {
+    console.log(line, line.length);
+    for (let i = line.length - 1; i >= 0; i--) {
         console.log(line[i]);
         if (playField[line[i]].every((value) => value == 2)) {
             console.log("delete");
@@ -248,10 +246,39 @@ function moveFaster(faster) {
     speed = faster;
 }
 
+// function rotateTetro() {
+//     if (canTetroRotate(centerOfTetro[3] + 1)) {
+//         centerOfTetro[3]++; //next type of tetro to drow
+//         if (centerOfTetro[3] == 4) {
+//             centerOfTetro[3] = 0;
+//         } //каждого элемента по 4 штуки
+//         for (let y = 19; y >= 0; y--) {
+//             for (let x = 9; x >= 0; x--) {
+//                 if (playField[y][x] == 1) { //delete tetro
+//                     playField[y][x] = 0
+//                 }
+//             }
+//         }
+//         drowNewTetro(transformTetroToAdd(centerOfTetro));
+//     }
+// }
+
+function canTetroRotate(nweTetroToAdd) {
+    let tetro = nweTetroToAdd;
+        for (let y = 0; y < tetro.length; y += 2)
+        if (playField[tetro[y]][tetro[y + 1]] == 2 || tetro[y] > 19 || tetro[y + 1] < 0 || tetro[y + 1] > 9) {
+            return false;
+        } else return true;
+}
+
 function rotateTetro() {
-    if (canTetroRotate()) {
-        centerOfTetro[3]++; //next type of tetro to drow
-        if(centerOfTetro[3] == 4) {centerOfTetro[3] = 0;} //каждого элемента по 4 штуки
+    let OldcenterOfTetro = centerOfTetro;
+//    centerOfTetro[3]++; //next type of tetro to drow
+    if (++centerOfTetro[3] == 4) {//next type of tetro to drow
+        centerOfTetro[3] = 0;
+    } //каждого элемента по 4 штуки
+
+    if (canTetroRotate(transformTetroToAdd(centerOfTetro))) {        
         for (let y = 19; y >= 0; y--) {
             for (let x = 9; x >= 0; x--) {
                 if (playField[y][x] == 1) { //delete tetro
@@ -260,7 +287,7 @@ function rotateTetro() {
             }
         }
         drowNewTetro(transformTetroToAdd(centerOfTetro));
-    }
+    } else centerOfTetro = OldcenterOfTetro;
 }
 
 document.addEventListener("keydown", event => {
