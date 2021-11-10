@@ -88,13 +88,11 @@ function drowNewTetro(newTetro) {
 };
 
 function transformTetroToAdd(positionAndTetroZeroPosition) {
-    console.log(positionAndTetroZeroPosition);
     let [tetroY, tetroX, tetroNum, tetroRotateNum] = positionAndTetroZeroPosition;
     let tetro = arrayOfTetro[tetroNum][tetroRotateNum];
     let tetroNewPosition = tetro.map((value, index) => {
         return (index % 2 == 1) ? (value + tetroX) : (value + tetroY);
     });
-    console.log(tetroNewPosition);
     return tetroNewPosition;
 }
 
@@ -104,7 +102,6 @@ function replaceToRotateTetro() {
 
 function addTetro() {
     let tetro = transformTetroToAdd(getRandomTetro());
-    console.log(tetro);
 
     for (let y = 0; y < tetro.length; y += 2)
         if (playField[tetro[y]][tetro[y + 1]] == 2) {
@@ -173,16 +170,18 @@ function movingTetro() {
                 }
             }
         }
-        clearFullLines(Math.max(...lineStopTetro));
-        lineStopTetro = [];
+        clearFullLines(Array.from(new Set(lineStopTetro)));//передает массив из значений у не повторяющихся их проверяет на заполнение
         addTetro();
     }
 }
 // Удаление линии при ее полном заполнении
-function clearFullLines(yToStart) {
-    for (let y = yToStart; y >= 0; y--) {
-        if (playField[y].every((value) => value == 2)) {
-            playField.slice(y, 1);
+function clearFullLines(line) {
+    console.log(line,line.length);
+    for (let i = line.length-1; i >= 0; i--) {
+        console.log(line[i]);
+        if (playField[line[i]].every((value) => value == 2)) {
+            console.log("delete");
+            playField.splice(line[i], 1);
             playField.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         }
     }
@@ -253,7 +252,6 @@ function rotateTetro() {
     if (canTetroRotate()) {
         centerOfTetro[3]++; //next type of tetro to drow
         if(centerOfTetro[3] == 4) {centerOfTetro[3] = 0;} //каждого элемента по 4 штуки
-        console.log(centerOfTetro[3]);
         for (let y = 19; y >= 0; y--) {
             for (let x = 9; x >= 0; x--) {
                 if (playField[y][x] == 1) { //delete tetro
@@ -267,7 +265,6 @@ function rotateTetro() {
 
 document.addEventListener("keydown", event => {
     if (event.key == "ArrowUp") {
-        console.log("up");
         rotateTetro();
     }
 });
@@ -280,7 +277,7 @@ document.addEventListener("keydown", event => {
 
 document.addEventListener("keyup", event => {
     if (event.key == " " || event.key == "ArrowDown") {
-        moveFaster(200);
+        moveFaster(600);
     }
 });
 
