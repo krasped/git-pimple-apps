@@ -1,5 +1,5 @@
 let main = document.querySelector('.main');
-let speed = 500;
+let speed = 400;
 let typeTetro = [];
 let centerOfTetro = []; // 3-какая фигура в массива, 1,2 -y,x
 let playField = [
@@ -90,23 +90,19 @@ function drowNewTetro(newTetro) {
 function transformTetroToAdd(positionAndTetroZeroPosition) {
     let [tetroY, tetroX, tetroNum, tetroRotateNum] = positionAndTetroZeroPosition;
     let tetro = arrayOfTetro[tetroNum][tetroRotateNum];
-    let tetroNewPosition = tetro.map((value, index) => {
+    return tetro.map((value, index) => {
         return (index % 2 == 1) ? (value + tetroX) : (value + tetroY);
     });
-    return tetroNewPosition;
 }
 
-// function replaceToRotateTetro() {
-//     let tetro = transformTetroToAdd(centerOfTetro);
-// }
 
 function addTetro() {
     let tetro = transformTetroToAdd(getRandomTetro());
-
+    console.log(centerOfTetro);
     for (let y = 0; y < tetro.length; y += 2)
         if (playField[tetro[y]][tetro[y + 1]] == 2) {
             console.log("конец");
-            stopGame();
+            return stopGame();
         } else {
             playField[tetro[y]][tetro[y + 1]] = 1;
         }
@@ -174,11 +170,8 @@ function movingTetro() {
 }
 // Удаление линии при ее полном заполнении
 function clearFullLines(line) {
-    console.log(line, line.length);
     for (let i = line.length - 1; i >= 0; i--) {
-        console.log(line[i]);
         if (playField[line[i]].every((value) => value == 2)) {
-            console.log("delete");
             playField.splice(line[i], 1);
             playField.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         }
@@ -267,16 +260,20 @@ function canTetroRotate(nweTetroToAdd) {
     let tetro = nweTetroToAdd;
         for (let y = 0; y < tetro.length; y += 2)
         if (playField[tetro[y]][tetro[y + 1]] == 2 || tetro[y] > 19 || tetro[y + 1] < 0 || tetro[y + 1] > 9) {
+            console.log("false");
             return false;
         } else return true;
 }
 
-function rotateTetro() {
-    let OldcenterOfTetro = centerOfTetro;
+function rotateTetro(centerOfTetro) {
+    console.log(centerOfTetro);
+    let OldcenterOfTetro = centerOfTetro[3];
+    console.log(OldcenterOfTetro);
 //    centerOfTetro[3]++; //next type of tetro to drow
-    if (++centerOfTetro[3] == 4) {//next type of tetro to drow
+    if ((centerOfTetro[3] + 1) == 4) {//next type of tetro to drow
         centerOfTetro[3] = 0;
-    } //каждого элемента по 4 штуки
+    } else centerOfTetro[3]++//каждого элемента по 4 штуки
+    console.log(OldcenterOfTetro);
 
     if (canTetroRotate(transformTetroToAdd(centerOfTetro))) {        
         for (let y = 19; y >= 0; y--) {
@@ -287,12 +284,18 @@ function rotateTetro() {
             }
         }
         drowNewTetro(transformTetroToAdd(centerOfTetro));
-    } else centerOfTetro = OldcenterOfTetro;
+        return centerOfTetro;
+    } else {
+        centerOfTetro[3] = OldcenterOfTetro;
+        console.log(OldcenterOfTetro);
+        console.log(centerOfTetro);
+        return --centerOfTetro;
+    }
 }
 
 document.addEventListener("keydown", event => {
     if (event.key == "ArrowUp") {
-        rotateTetro();
+        rotateTetro(centerOfTetro);
     }
 });
 
@@ -303,8 +306,8 @@ document.addEventListener("keydown", event => {
 });
 
 document.addEventListener("keyup", event => {
-    if (event.key == " " || event.key == "ArrowDown") {
-        moveFaster(600);
+    if (event.key == "ArrowDown") {
+        moveFaster(500);
     }
 });
 
@@ -317,6 +320,12 @@ document.addEventListener("keydown", event => {
 document.addEventListener("keydown", event => {
     if (event.key == "ArrowRight" && canTetroMovingRight()) {
         moveRight();
+    }
+});
+
+document.addEventListener("keydown", event => {
+    if (event.key == " ") {
+        stopGame();
     }
 });
 
