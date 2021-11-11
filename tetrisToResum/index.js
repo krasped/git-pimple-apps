@@ -257,12 +257,12 @@ function moveFaster(faster) {
 // }
 
 function canTetroRotate(nweTetroToAdd) {
-    let tetro = nweTetroToAdd;
-        for (let y = 0; y < tetro.length; y += 2)
-        if (playField[tetro[y]][tetro[y + 1]] == 2 || tetro[y] > 19 || tetro[y + 1] < 0 || tetro[y + 1] > 9) {
-            console.log("false");
-            return false;
-        } else return true;
+    let tetro = nweTetroToAdd;    
+        for (let y = 0; y < tetro.length; y += 2) {
+            if (tetro[y] > 19 || playField[tetro[y]][tetro[y + 1]] == 2 || tetro[y + 1] < 0 || tetro[y + 1] > 9) {
+                return false;
+            } 
+        } return true;
 }
 
 function rotateTetro(centerOfTetro) {

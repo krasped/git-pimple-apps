@@ -11,20 +11,20 @@ body {
     width: 320px;
     height: 620px;
     margin: 100px auto 0;
-    border: 10px solid rgb(127, 126, 129);
+    border: 10px solid rgb(238, 198, 152);
     font-size: 0;
-    background-color:rgb(202, 167, 241)
+    background-color:rgb(209, 177, 245)
 }
 
 .cell {
     width: 30px;
     height: 30px;
-    border: 1px solid rgb(3, 1, 29);
+    border: 1px solid grey;
     display: inline-block;
 }
 
 .fixedCell{
-    background-color: rgb(40, 131, 12);
+    background-color: rgb(31, 174, 218);
 }
 
 .movingCell{
