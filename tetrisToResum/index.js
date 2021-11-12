@@ -1,7 +1,16 @@
+"use strict";
+
 let main = document.querySelector('.main');
+let score = document.querySelector('.score');
+let current = document.querySelector('.current');
+let currentNum = 0;
+let scoreNum = ((localStorage.getItem('score')) ? localStorage.getItem('score') : 50);
+console.log(localStorage.getItem('score'));
 let speed = 400;
 let typeTetro = [];
 let centerOfTetro = []; // 3-какая фигура в массива, 1,2 -y,x
+
+score.textContent = scoreNum;
 let playField = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -74,6 +83,19 @@ let arrayOfTetro = [
 
 let mainInnerHTML = '';
 
+function addCurrent(cur){
+    current.textContent = `${currentNum + cur}`;
+    return currentNum+=cur;
+}
+
+function addScore(cur) {
+    if(cur > scoreNum){
+        localStorage.setItem('score', cur);
+        scoreNum = cur;
+        score.textContent = scoreNum;
+    }
+}
+
 function getRandomTetro(max = 7) {
     let x = Math.floor(Math.random() * max);
     return centerOfTetro = [1, 4, x, 0]; //некрасиво
@@ -98,10 +120,10 @@ function transformTetroToAdd(positionAndTetroZeroPosition) {
 
 function addTetro() {
     let tetro = transformTetroToAdd(getRandomTetro());
-    console.log(centerOfTetro);
     for (let y = 0; y < tetro.length; y += 2)
         if (playField[tetro[y]][tetro[y + 1]] == 2) {
             console.log("конец");
+            addScore(currentNum);
             return stopGame();
         } else {
             playField[tetro[y]][tetro[y + 1]] = 1;
@@ -153,7 +175,8 @@ function movingTetro() {
                 }
             }
         }
-        centerOfTetro[0]++; // где находится центр фигуры
+        centerOfTetro[0]++;// где находится центр фигуры
+        addCurrent(1); // добавляет к репорду при движении на 1 вниз
     } else if (!canTetroMoving()) {
         let lineStopTetro = [];
         for (let y = 19; y >= 0; y--) {
@@ -173,7 +196,8 @@ function clearFullLines(line) {
     for (let i = line.length - 1; i >= 0; i--) {
         if (playField[line[i]].every((value) => value == 2)) {
             playField.splice(line[i], 1);
-            playField.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            playField.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            addCurrent(100);
         }
     }
 }
@@ -239,22 +263,6 @@ function moveFaster(faster) {
     speed = faster;
 }
 
-// function rotateTetro() {
-//     if (canTetroRotate(centerOfTetro[3] + 1)) {
-//         centerOfTetro[3]++; //next type of tetro to drow
-//         if (centerOfTetro[3] == 4) {
-//             centerOfTetro[3] = 0;
-//         } //каждого элемента по 4 штуки
-//         for (let y = 19; y >= 0; y--) {
-//             for (let x = 9; x >= 0; x--) {
-//                 if (playField[y][x] == 1) { //delete tetro
-//                     playField[y][x] = 0
-//                 }
-//             }
-//         }
-//         drowNewTetro(transformTetroToAdd(centerOfTetro));
-//     }
-// }
 
 function canTetroRotate(nweTetroToAdd) {
     let tetro = nweTetroToAdd;    

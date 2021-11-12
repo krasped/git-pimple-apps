@@ -3,14 +3,13 @@
 }
 
 body {
-    margin: 0;
-    background: rgb(238, 240, 205);
+    margin: 10;
 }
 
 .main{
     width: 320px;
     height: 620px;
-    margin: 100px auto 0;
+    margin: auto 0;
     border: 10px solid rgb(238, 198, 152);
     font-size: 0;
     background-color:rgb(209, 177, 245)
@@ -29,4 +28,18 @@ body {
 
 .movingCell{
     background-color: rgb(255, 255, 255);
+}
+
+.wrapperTetris{
+    display: flex;
+    background: rgb(238, 240, 205);
+    width: 600px;
+    border: 1px solid grey;
+    margin:100px auto 0;
+
+}
+
+.infoTetris{
+    border: 1px solid grey;
+    width:278px;
 }
