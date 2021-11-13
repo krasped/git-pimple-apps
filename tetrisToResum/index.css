@@ -1,4 +1,4 @@
-*{
+* {
     box-sizing: border-box;
 }
 
@@ -6,13 +6,13 @@ body {
     margin: 10;
 }
 
-.main{
+.main {
     width: 320px;
     height: 620px;
     margin: auto 0;
     border: 10px solid rgb(238, 198, 152);
     font-size: 0;
-    background-color:rgb(209, 177, 245)
+    background-color: rgb(209, 177, 245)
 }
 
 .cell {
@@ -21,25 +21,38 @@ body {
     border: 1px solid grey;
     display: inline-block;
 }
+.cellinfo {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}
 
-.fixedCell{
+.fixedCell {
     background-color: rgb(31, 174, 218);
 }
 
-.movingCell{
+.movingCell {
     background-color: rgb(255, 255, 255);
+    border: 1px solid grey;
 }
 
-.wrapperTetris{
+.wrapperTetris {
     display: flex;
     background: rgb(238, 240, 205);
     width: 600px;
     border: 1px solid grey;
-    margin:100px auto 0;
+    margin: 100px auto 0;
 
 }
 
-.infoTetris{
+.infoTetris {
     border: 1px solid grey;
-    width:278px;
+    width: 278px;
+}
+
+.nextFigure {
+    height: 60px;
+    width: 120px;
+    font-size: 0;
+    border-collapse: collapse;
 }

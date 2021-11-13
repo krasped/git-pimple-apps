@@ -1,6 +1,7 @@
 "use strict";
 
 let main = document.querySelector('.main');
+let nextFigure = document.querySelector('.nextFigure');
 let score = document.querySelector('.score');
 let current = document.querySelector('.current');
 let currentNum = 0;
@@ -9,8 +10,14 @@ console.log(localStorage.getItem('score'));
 let speed = 400;
 let typeTetro = [];
 let centerOfTetro = []; // 3-какая фигура в массива, 1,2 -y,x
-
+let nextTetro = Math.floor(Math.random() * 7);// сначала создается случайная фигура, потом заменяется
 score.textContent = scoreNum;
+
+let tetroField = [
+    [0,0,0,0],
+    [0,0,0,0]
+];
+
 let playField = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -33,7 +40,6 @@ let playField = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
-
 
 let arrayOfTetro = [
     [
@@ -80,8 +86,19 @@ let arrayOfTetro = [
     ] // [_]
 ];
 
-
 let mainInnerHTML = '';
+let nextFigureHTML = '';
+
+function addNextTetroInfo(nextTetro) {
+    tetroField = [ //clear tetroField
+        [0,0,0,0],
+        [0,0,0,0]
+    ];
+    let tetro = transformTetroToAdd([1, 1, nextTetro, 0]);
+    let x = drowNewTetro(tetro, tetroField);
+    console.log(tetroField);
+}
+
 
 function addCurrent(cur){
     current.textContent = `${currentNum + cur}`;
@@ -96,17 +113,18 @@ function addScore(cur) {
     }
 }
 
+
 function getRandomTetro(max = 7) {
-    let x = Math.floor(Math.random() * max);
-    return centerOfTetro = [1, 4, x, 0]; //некрасиво
+    let oldTetro = nextTetro;
+    nextTetro = Math.floor(Math.random() * max);
+    return centerOfTetro = [1, 4, oldTetro, 0]; //некрасиво
 }
 
-function drowNewTetro(newTetro) {
+function drowNewTetro(newTetro, field) { //clear function
     let tetro = newTetro;
     for (let y = 0; y < tetro.length; y += 2) {
-        playField[tetro[y]][tetro[y + 1]] = 1;
+        field[tetro[y]][tetro[y + 1]] = 1;
     }
-    drawField(); // для быстрой реакции
 };
 
 function transformTetroToAdd(positionAndTetroZeroPosition) {
@@ -189,6 +207,8 @@ function movingTetro() {
         }
         clearFullLines(Array.from(new Set(lineStopTetro))); //передает массив из значений у не повторяющихся их проверяет на заполнение
         addTetro();
+        addNextTetroInfo(nextTetro);
+        drawInfoNextTetro();
     }
 }
 // Удаление линии при ее полном заполнении
@@ -200,6 +220,22 @@ function clearFullLines(line) {
             addCurrent(100);
         }
     }
+}
+
+function drawInfoNextTetro() {
+    nextFigureHTML = '';
+    for (let y = 0; y < 2; y++) {
+        for (let x = 0; x < 5; x++) {
+            switch (tetroField[y][x]) {
+                case 0:
+                    nextFigureHTML += '<div class="cellinfo"></div>';
+                    break;
+                case 1:
+                    nextFigureHTML += '<div class="cellinfo movingCell"></div>';
+            }
+        }
+    }
+    nextFigure.innerHTML = nextFigureHTML;
 }
 
 function drawField() {
@@ -287,11 +323,13 @@ function rotateTetro(centerOfTetro) {
         for (let y = 19; y >= 0; y--) {
             for (let x = 9; x >= 0; x--) {
                 if (playField[y][x] == 1) { //delete tetro
-                    playField[y][x] = 0
+                    playField[y][x] = 0;
                 }
             }
         }
-        drowNewTetro(transformTetroToAdd(centerOfTetro));
+        drowNewTetro(transformTetroToAdd(centerOfTetro), playField);
+
+        drawField(); // для быстрой реакции
         return centerOfTetro;
     } else {
         centerOfTetro[3] = OldcenterOfTetro;
