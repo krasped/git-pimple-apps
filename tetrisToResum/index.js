@@ -12,6 +12,7 @@ let typeTetro = [];
 let centerOfTetro = []; // 3-какая фигура в массива, 1,2 -y,x
 let nextTetro = Math.floor(Math.random() * 7);// сначала создается случайная фигура, потом заменяется
 score.textContent = scoreNum;
+let state = "play";
 
 let tetroField = [
     [0,0,0,0],
@@ -142,6 +143,7 @@ function addTetro() {
         if (playField[tetro[y]][tetro[y + 1]] == 2) {
             console.log("конец");
             addScore(currentNum);
+            state = "loose";
             return stopGame();
         } else {
             playField[tetro[y]][tetro[y + 1]] = 1;
@@ -151,7 +153,7 @@ function addTetro() {
 function canTetroMoving() {
     for (let y = 19; y >= 0; y--) {
         for (let x = 0; x < 10; x++) {
-            if (playField[y][x] == 1 && (y == 19 || playField[y + 1][x] == 2)) {
+            if (temerStart == 0 || playField[y][x] == 1 && (y == 19 || playField[y + 1][x] == 2)) {
                 return false
             }
         }
@@ -162,7 +164,7 @@ function canTetroMoving() {
 function canTetroMovingLeft() {
     for (let y = 19; y >= 0; y--) {
         for (let x = 0; x < 10; x++) {
-            if (playField[y][x] == 1 && (x == 0 || playField[y][x - 1] == 2)) {
+            if (temerStart == 0 || playField[y][x] == 1 && (x == 0 || playField[y][x - 1] == 2)) {
                 return false;
             }
         }
@@ -173,7 +175,7 @@ function canTetroMovingLeft() {
 function canTetroMovingRight() {
     for (let y = 19; y >= 0; y--) {
         for (let x = 0; x < 10; x++) {
-            if (playField[y][x] == 1 && (x == 9 || playField[y][x + 1] == 2)) {
+            if (temerStart == 0 || playField[y][x] == 1 && (x == 9 || playField[y][x + 1] == 2)) {
                 return false;
             }
         }
@@ -267,6 +269,7 @@ function startGame() {
 
 function stopGame() {
     clearInterval(temerStart);
+    temerStart = 0;
 }
 
 function moveLeft() {
@@ -303,7 +306,7 @@ function moveFaster(faster) {
 function canTetroRotate(nweTetroToAdd) {
     let tetro = nweTetroToAdd;    
         for (let y = 0; y < tetro.length; y += 2) {
-            if (tetro[y] > 19 || playField[tetro[y]][tetro[y + 1]] == 2 || tetro[y + 1] < 0 || tetro[y + 1] > 9) {
+            if (temerStart == 0 || tetro[y] > 19 || playField[tetro[y]][tetro[y + 1]] == 2 || tetro[y + 1] < 0 || tetro[y + 1] > 9) {
                 return false;
             } 
         } return true;
@@ -340,39 +343,45 @@ function rotateTetro(centerOfTetro) {
 }
 
 document.addEventListener("keydown", event => {
-    if (event.key == "ArrowUp") {
+    if (event.key == "ArrowUp" && state === "play") {
         rotateTetro(centerOfTetro);
+        console.log(state);
     }
 });
 
 document.addEventListener("keydown", event => {
-    if (event.key == " " || event.key == "ArrowDown") {
+    if (event.key == "ArrowDown" && state === "play") {
         moveFaster(50);
     }
 });
 
 document.addEventListener("keyup", event => {
-    if (event.key == "ArrowDown") {
+    if (event.key == "ArrowDown" && state === "play") {
         moveFaster(500);
     }
 });
 
 document.addEventListener("keydown", event => {
-    if (event.key == "ArrowLeft" && canTetroMovingLeft()) {
+    if (event.key == "ArrowLeft" && canTetroMovingLeft() && state === "play") {
         moveLeft();
     }
 });
 
 document.addEventListener("keydown", event => {
-    if (event.key == "ArrowRight" && canTetroMovingRight()) {
+    if (event.key == "ArrowRight" && canTetroMovingRight() && state === "play") {
         moveRight();
     }
 });
 
 document.addEventListener("keydown", event => {
-    if (event.key == " ") {
-        stopGame();
-    }
+    if (event.key == " " && state !== "loose") {
+        console.log(temerStart);
+        if(state == "loose" || temerStart) {
+            stopGame();
+            state = "pause";
+            console.log(state);  
+        } else {startGame(); state = "play";}
+    } 
 });
 
 
