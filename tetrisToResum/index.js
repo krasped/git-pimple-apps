@@ -160,7 +160,6 @@ function canTetroMoving(direction) {
             }
         }
     }
-    console.log(true);
     return true;
 }
 
@@ -176,9 +175,7 @@ function movingTetro() {
         }
         centerOfTetro[0]++;// где находится центр фигуры
         addCurrent(1); // добавляет к репорду при движении на 1 вниз
-        console.log(false);
     } else if (!canTetroMoving("down") && state !== "loose") {
-
         let lineStopTetro = [];
         for (let y = 19; y >= 0; y--) {
             for (let x = 0; x < 10; x++) {
@@ -196,7 +193,7 @@ function movingTetro() {
 }
 // Удаление линии при ее полном заполнении
 function clearFullLines(lines) {
-    for (let i = lines.length - 1; i >= 0; i--) {
+    for (let i = lines.length - 1; i >= 0; i--) {console.log(1);
         if (playField[lines[i]].every((value) => value == 2)) {
             playField.splice(lines[i], 1);
             playField.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
@@ -243,7 +240,6 @@ function drawField() {
 let temerStart;
 
 function startGame() {
-    console.log(state);
     state = "play";
     temerStart = setTimeout(startGame, speed);
     movingTetro();
@@ -301,14 +297,11 @@ function canTetroRotate(nweTetroToAdd) {
 }
 
 function rotateTetro(centerOfTetro) {
-    console.log(centerOfTetro);
     let OldcenterOfTetro = centerOfTetro[3];
-    console.log(OldcenterOfTetro);
 //    centerOfTetro[3]++; //next type of tetro to drow
     if ((centerOfTetro[3] + 1) == 4) {//next type of tetro to drow
         centerOfTetro[3] = 0;
     } else centerOfTetro[3]++//каждого элемента по 4 штуки
-    console.log(OldcenterOfTetro);
 
     if (canTetroRotate(transformTetroToAdd(centerOfTetro))) {        
         for (let y = 19; y >= 0; y--) {
@@ -346,7 +339,6 @@ document.addEventListener("keyup", event => {
     if (event.key == "ArrowDown" && state === "play") {
         
         moveFaster(500);// потому что не срабатывает вверх во время паузы
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 });
 
@@ -374,5 +366,7 @@ document.addEventListener("keydown", event => {
 
 
 drowNewTetro(transformTetroToAdd(getRandomTetro()), playField);
+addNextTetroInfo(nextTetro);
+drawInfoNextTetro();
 drawField();
 startGame();
