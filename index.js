@@ -329,36 +329,41 @@ let buttons = tetroControl.querySelectorAll("button");
 console.log(buttons[1]);
 
 
-buttons[0].addEventListener("touchstart" || "mousedown", event => {// up
+buttons[0].addEventListener("touchstart", event => {// up
+    if(state === "play") rotateTetro(centerOfTetro); 
     event.preventDefault();
-    if(state === "play") rotateTetro(centerOfTetro);    
 });
-buttons[1].addEventListener("touchstart" || "mousedown", event => {// left
-    event.preventDefault();
+
+buttons[1].addEventListener("touchstart", event => {// left
     if(state === "play") {
         if (canTetroMoving("left") && state === "play") {
             moveLeft();
         }
     }
+    event.preventDefault();
 });
-buttons[2].addEventListener("touchstart" || "mousedown", event => {//right 
-    event.preventDefault();   
+
+buttons[2].addEventListener("touchstart", event => {//right   
     if(state === "play") {
         if (canTetroMoving("right") && state === "play") {
             moveRight();
         }
     }
-});
-buttons[3].addEventListener("touchstart" || "mousedown", event => {//down
-    event.preventDefault();
-    if(state === "play") {moveFaster(50);}
-    
-});
-buttons[3].addEventListener("touchend" || "mouseup", event => {//down
-    event.preventDefault();
-    if(state === "play") {moveFaster(500);}
+    event.preventDefault(); 
 });
 
+buttons[3].addEventListener("touchstart", event => {//down
+    if(state === "play") {moveFaster(50);}
+    event.preventDefault();
+});
+
+buttons[3].addEventListener("touchend", event => {//down
+    if(state === "play") {moveFaster(500);}
+    event.preventDefault();
+});
+
+
+///////////////////////////////////////
 document.addEventListener("keydown", event => {
     if (event.key == "ArrowUp" && state === "play") {
         rotateTetro(centerOfTetro);

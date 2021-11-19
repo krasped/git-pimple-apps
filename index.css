@@ -58,6 +58,7 @@ body {
     border-collapse: collapse;
 }
 
-.tetroControl {
-   
+.tetroControl button {
+   height: 50px;
+   width: 50px;
   }
