@@ -323,6 +323,38 @@ function rotateTetro(centerOfTetro) {
     }
 }
 
+// Create button to control
+let tetroControl = document.querySelector(".tetroControl")
+let buttons = tetroControl.querySelectorAll("button");
+buttons.forEach((value) => console.log(value));
+console.log(buttons[1]);
+
+buttons[0].addEventListener("mousedown" || "touchstart", () => {// up
+    if(state === "play") rotateTetro(centerOfTetro);
+});
+buttons[1].addEventListener("mousedown" || "touchstart", () => {// left
+    if(state === "play") {
+        if (canTetroMoving("left") && state === "play") {
+            moveLeft();
+        }
+    };
+});
+buttons[2].addEventListener("mousedown" || "touchstart", () => {//right
+    if(state === "play") {
+        if (canTetroMoving("right") && state === "play") {
+            moveRight();
+        }
+    };
+});
+buttons[3].addEventListener("mousedown" || "touchstart", () => {//down
+    console.log("hi");
+    if(state === "play") moveFaster(50);
+});
+buttons[3].addEventListener("mouseup" || "touchend", () => {//down
+    console.log("fuck");
+    if(state === "play") moveFaster(500);
+});
+
 document.addEventListener("keydown", event => {
     if (event.key == "ArrowUp" && state === "play") {
         rotateTetro(centerOfTetro);

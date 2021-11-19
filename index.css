@@ -38,6 +38,7 @@ body {
 
 .wrapperTetris {
     display: flex;
+    flex-wrap: wrap;
     background: rgb(238, 240, 205);
     width: 600px;
     border: 1px solid grey;
