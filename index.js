@@ -90,10 +90,6 @@ let mainInnerHTML = '';
 let nextFigureHTML = '';
 
 function addNextTetroInfo(nextTetro) {
-    // tetroField = [ //clear tetroField
-    //     [0,0,0,0],
-    //     [0,0,0,0]
-    // ];
     clearField(tetroField);
     let tetro = transformTetroToAdd([1, 1, nextTetro, 0]);
     drowNewTetro(tetro, tetroField);
@@ -148,7 +144,7 @@ function transformTetroToAdd(positionAndTetroZeroPosition) {
     });
 }
 
-function canTetroMoving(direction) {
+function canTetroMoving(direction) {// можно проверять по центру тетро преобразовывать в координаты и их сравнивать
     for (let y = 19; y >= 0; y--) {
         for (let x = 0; x < 10; x++) {
             let bol;
@@ -170,18 +166,13 @@ function canTetroMoving(direction) {
     }
     return true;
 }
-
+ 
 function movingTetro() {
     if (canTetroMoving("down")) {
-        for (let y = 19; y >= 0; y--) {
-            for (let x = 0; x < 10; x++) {
-                if (playField[y][x] == 1 && playField[y + 1][x] == 0) {
-                    playField[y][x] = 0;
-                    playField[y + 1][x] = 1;
-                }
-            }
-        }
-        centerOfTetro[0]++;// где находится центр фигуры
+        centerOfTetro[0]++;
+        deleteTetro();
+        drowNewTetro(transformTetroToAdd(centerOfTetro), playField);
+        drawField();// где находится центр фигуры
         addCurrent(1); // добавляет к репорду при движении на 1 вниз
     } else if (!canTetroMoving("down") && state !== "loose") {
         let lineStopTetro = [];
@@ -291,30 +282,22 @@ function stopGame() {
     }
 }
 
-function moveLeft() {
-    for (let y = 19; y >= 0; y--) {
-        for (let x = 0; x < 10; x++) {
-            if (playField[y][x] == 1 && playField[y][x - 1] == 0) {
-                playField[y][x - 1] = 1;
-                playField[y][x] = 0;
-            }
-        }
+function moveLeft(check) {
+    if(check){
+        centerOfTetro[1]--;
+        deleteTetro();
+        drowNewTetro(transformTetroToAdd(centerOfTetro), playField);
+        drawField();
     }
-    centerOfTetro[1]--;
-    drawField();
 }
 
-function moveRight() {
-    for (let y = 19; y >= 0; y--) {
-        for (let x = 9; x >= 0; x--) {
-            if (playField[y][x] == 1 && playField[y][x + 1] == 0) {
-                playField[y][x + 1] = 1;
-                playField[y][x] = 0
-            }
-        }
+function moveRight(check) {
+    if(check) {
+        centerOfTetro[1]++;
+        deleteTetro();
+        drowNewTetro(transformTetroToAdd(centerOfTetro), playField);
+        drawField();
     }
-    centerOfTetro[1]++;
-    drawField();
 }
 //Move faster
 function moveFaster(faster) {
@@ -330,6 +313,16 @@ function canTetroRotate(nweTetroToAdd) {
         } return true;
 }
 
+function deleteTetro(){
+    for (let y = 19; y >= 0; y--) {
+        for (let x = 9; x >= 0; x--) {
+            if (playField[y][x] == 1) { //delete tetro
+                playField[y][x] = 0;
+            }
+        }
+    }
+}
+
 function rotateTetro(centerOfTetro) {
     let OldcenterOfTetro = centerOfTetro[3];
 //    centerOfTetro[3]++; //next type of tetro to drow
@@ -338,13 +331,7 @@ function rotateTetro(centerOfTetro) {
     } else centerOfTetro[3]++//каждого элемента по 4 штуки
 
     if (canTetroRotate(transformTetroToAdd(centerOfTetro))) {        
-        for (let y = 19; y >= 0; y--) {
-            for (let x = 9; x >= 0; x--) {
-                if (playField[y][x] == 1) { //delete tetro
-                    playField[y][x] = 0;
-                }
-            }
-        }
+        deleteTetro();
         drowNewTetro(transformTetroToAdd(centerOfTetro), playField);
 
         drawField(); // для быстрой реакции
@@ -368,8 +355,8 @@ buttons[0].addEventListener("touchstart", event => {// up
 
 buttons[1].addEventListener("touchstart", event => {// left
     if(state === "play") {
-        if (canTetroMoving("left") && state === "play") {
-            moveLeft();
+        if (state === "play") {
+            moveLeft(canTetroMoving("left"));
         }
     }
     event.preventDefault();
@@ -377,8 +364,8 @@ buttons[1].addEventListener("touchstart", event => {// left
 
 buttons[2].addEventListener("touchstart", event => {//right   
     if(state === "play") {
-        if (canTetroMoving("right") && state === "play") {
-            moveRight();
+        if (state === "play") {
+            moveRight(canTetroMoving("right"));
         }
     }
     event.preventDefault(); 
@@ -422,14 +409,14 @@ document.addEventListener("keyup", event => {
 });
 
 document.addEventListener("keydown", event => {
-    if (event.key == "ArrowLeft" && canTetroMoving("left") && state === "play") {
-        moveLeft();
+    if (event.key == "ArrowLeft" && state === "play") {
+        moveLeft(canTetroMoving("left"));
     }
 });
 
 document.addEventListener("keydown", event => {
-    if (event.key == "ArrowRight" && canTetroMoving("right") && state === "play") {
-        moveRight();
+    if (event.key == "ArrowRight" && state === "play") {
+        moveRight(canTetroMoving("right"));
     }
 });
 
