@@ -394,6 +394,13 @@ buttons[3].addEventListener("touchend", event => {//down
     event.preventDefault();
 });
 
+buttons[4].addEventListener("touchstart", event => {//right 
+    event.preventDefault();   
+    if(state === "play") {
+        stopGame();
+        state = "pause";  
+    } else if(state === "pause") {moveFaster(500);startGame();}
+});
 ///////////////////////////////////////
 document.addEventListener("keydown", event => {
     if (event.key == "ArrowUp" && state === "play") {
@@ -437,7 +444,7 @@ document.addEventListener("keydown", event => {
 
 function startNewGame() {
     console.log("new game");
-    speed = 600;
+    speed = 500;
     clearField(playField);
     drowNewTetro(transformTetroToAdd(getRandomTetro()), playField);
     addNextTetroInfo(nextTetro);
