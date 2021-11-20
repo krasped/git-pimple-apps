@@ -40,7 +40,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     background: rgb(238, 240, 205);
-    width: 600px;
+    width: 500px;
     border: 1px solid grey;
     margin: 100px auto 0;
 
@@ -48,7 +48,7 @@ body {
 
 .infoTetris {
     border: 1px solid grey;
-    width: 278px;
+    width: 150px;
 }
 
 .nextFigure {
@@ -58,7 +58,20 @@ body {
     border-collapse: collapse;
 }
 
+.tetroControl {
+    padding: 0px;
+    border: 1px solid rgb(248, 10, 10); 
+    margin-left: 10px;
+    text-align: center;
+    width: 300px;
+  }
+
 .tetroControl button {
+    padding: 2px;
+    margin: 2px;
+    margin-left: 35px;
+    margin-right: 35px;
+    border: 1px solid rgb(73, 73, 73); 
    height: 50px;
-   width: 50px;
+   width: 70px;
   }
