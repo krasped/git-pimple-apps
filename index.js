@@ -8,7 +8,6 @@ let currentNum = 0;
 let scoreNum = ((localStorage.getItem('score')) ? localStorage.getItem('score') : 50);
 console.log(localStorage.getItem('score'));
 let speed = 400;
-let typeTetro = [];
 let centerOfTetro = []; // 3-какая фигура в массива, 1,2 -y,x
 let nextTetro = Math.floor(Math.random() * 7);// сначала создается случайная фигура, потом заменяется
 score.textContent = scoreNum;
@@ -91,12 +90,21 @@ let mainInnerHTML = '';
 let nextFigureHTML = '';
 
 function addNextTetroInfo(nextTetro) {
-    tetroField = [ //clear tetroField
-        [0,0,0,0],
-        [0,0,0,0]
-    ];
+    // tetroField = [ //clear tetroField
+    //     [0,0,0,0],
+    //     [0,0,0,0]
+    // ];
+    clearField(tetroField);
     let tetro = transformTetroToAdd([1, 1, nextTetro, 0]);
     drowNewTetro(tetro, tetroField);
+}
+
+function clearField(field) {
+    field.forEach((_, y) => {
+        field[y].forEach((_, x) => {
+            field[y][x] = 0;
+        });
+    }); // clear array of array   
 }
 
 function addCurrent(cur){
@@ -120,12 +128,12 @@ function getRandomTetro(max = 7) {
 function drowNewTetro(newTetro, field) { //clear function
     let tetro = newTetro;   
     for (let y = 0; y < tetro.length; y += 2) {
-        if (field[tetro[y]][tetro[y + 1]] == 2) {
-            if(!canTetroRotate(tetro)){// gпроверяем полное окончание игры
-                state = "loose";
-                console.log("вы проиграли");
-            }
-            return stopGame();
+        if (field[tetro[y]][tetro[y + 1]] == 2) {// gпроверяем полное окончание игры
+            state = "loose";            
+            console.log("вы проиграли");
+            stopGame();
+            alert("вы проиграли, начать новую игру");
+            return startNewGame();
         } else {
             field[tetro[y]][tetro[y + 1]] = 1;
         }
@@ -248,12 +256,39 @@ function startGame() {
 
 function stopGame() {
     if(state === "loose"){
+        playField = [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ];
+        drawField();
+        clearInterval(temerStart);
         console.log("и это правда тут добавим что будет если конец");
         addScore(currentNum);
-    }
-    console.log("конец");
+        currentNum = 0;
+        
+    } else {
+    console.log("pausa");
     state = "stop";
     clearInterval(temerStart);
+    }
 }
 
 function moveLeft() {
@@ -285,7 +320,6 @@ function moveRight() {
 function moveFaster(faster) {
     speed = faster;
 }
-
 
 function canTetroRotate(nweTetroToAdd) {
     let tetro = nweTetroToAdd;    
@@ -326,8 +360,6 @@ function rotateTetro(centerOfTetro) {
 // Create button to control
 let tetroControl = document.querySelector(".tetroControl")
 let buttons = tetroControl.querySelectorAll("button");
-console.log(buttons[1]);
-
 
 buttons[0].addEventListener("touchstart", event => {// up
     if(state === "play") rotateTetro(centerOfTetro); 
@@ -361,7 +393,6 @@ buttons[3].addEventListener("touchend", event => {//down
     if(state === "play") {moveFaster(500);}
     event.preventDefault();
 });
-
 
 ///////////////////////////////////////
 document.addEventListener("keydown", event => {
@@ -404,10 +435,14 @@ document.addEventListener("keydown", event => {
     } 
 });
 
+function startNewGame() {
+    console.log("new game");
+    speed = 600;
+    clearField(playField);
+    drowNewTetro(transformTetroToAdd(getRandomTetro()), playField);
+    addNextTetroInfo(nextTetro);
+    drawInfoNextTetro();
+    startGame();
+}
 
-
-drowNewTetro(transformTetroToAdd(getRandomTetro()), playField);
-addNextTetroInfo(nextTetro);
-drawInfoNextTetro();
-drawField();
-startGame();
+startNewGame();
