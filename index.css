@@ -15,6 +15,16 @@ body {
     background-color: rgb(209, 177, 245)
 }
 
+.wrapperTetris {
+    display: flex;
+    flex-wrap: wrap;
+    background: rgb(238, 240, 205);
+    width: 500px;
+    border: 1px solid grey;
+    margin: 100px auto 0;
+
+}
+
 .cell {
     width: 30px;
     height: 30px;
@@ -36,30 +46,21 @@ body {
     border: 1px solid grey;
 }
 
-.wrapperTetris {
-    display: flex;
-    flex-wrap: wrap;
-    background: rgb(238, 240, 205);
-    width: 500px;
-    border: 1px solid grey;
-    margin: 100px auto 0;
-
-}
-
 .infoTetris {
-    border: 1px solid grey;
     width: auto;
+    padding: 10px;
 }
 
 .nextFigure {
     height: 60px;
     width: 120px;
     font-size: 0;
+    margin: 10px;
 }
 
 .tetroControl {
     padding: 0px;
-    border: 1px solid grey; 
+
     margin-left: 10px;
     text-align: center;
     width: 300px;
@@ -75,4 +76,5 @@ body {
    width: 70px;
    overflow-x:hidden;
    font-size: 15px;
+   border-radius: 5px;
   }
