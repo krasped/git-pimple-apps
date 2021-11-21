@@ -348,6 +348,10 @@ function rotateTetro(centerOfTetro) {
 let tetroControl = document.querySelector(".tetroControl")
 let buttons = tetroControl.querySelectorAll("button");
 
+tetroControl.addEventListener("touchstart", e => {
+    e.preventDefault();
+});
+
 buttons[0].addEventListener("touchstart", event => {// up
     if(state === "play") rotateTetro(centerOfTetro); 
     event.preventDefault();
